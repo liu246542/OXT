@@ -8,6 +8,13 @@ from .preprocess_f import database
 
 class OXT_client:
     def __init__(self):
+        """
+        k_s: 用于派生加密密钥， k_e = F(k_s, w)
+
+        k_t: 用于生成stag， stag = TSetGetTag(k_t, w)
+
+        k_x, k_i, k_z: 用于 PRF F_p，范围限制在 Z_p^*
+        """
 
         self.ddh = DiffieHellman()
         k_s = os.urandom(512)
@@ -25,6 +32,15 @@ class OXT_client:
 
 
     def forServer(self,database):
+        """
+        database 是一个实例：
+        database.dic 倒排索引，记录所有的关键词，以及每个关键词对应的文件
+        database.file_list 记录所有文件
+        database.get_file_index(file) -> index 通过dic中记录的文件，获取对应的 index
+        
+
+
+        """
         k_x = self.client_key["k_x"]
         k_i = self.client_key["k_i"]
         k_s = self.client_key["k_s"]
